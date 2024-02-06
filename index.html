@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link href="./output.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="error" class="error-message m-2 pl-8 hidden">
+    </div>
+    <div id="success" class="success-message m-2 pl-8 hidden"></div>
+    <section>
+        <form class="border w-[50%] m-auto p-2 mt-10" name="expense" id="expense">
+            <h1 class=" text-2xl underline mb-3 text-center">Add Expense</h1>
+            <div class="flex flex-col mb-4">
+                <label id="title">Expense Name:</label>
+                <input placeholder="e.g spend on shoping" id="title"
+                    class="border border-black rounded-sm p-1 w-[50%]" />
+            </div>
+
+            <div class="flex flex-col mb-4">
+                <label id="amount">Amount:</label>
+                <input type="number" placeholder="e.g 1000" id="amount"
+                    class="border border-black rounded-sm p-1 w-[50%]" />
+            </div>
+            <div class="flex justify-between mb-4">
+                <div class="flex flex-col">
+                    <label class="mb-1" id="tag">Tag(e.g. Entertainment)</label>
+                    <select class="p-1" id="tag">
+                        <option>Entertainment</option>
+                        <option>Health</option>
+                        <option>EMI</option>
+                        <option>Utilities</option>
+                        <option>Insurance</option>
+                        <option>Food</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1" id="date">Date</label>
+                    <input type="date" class="p-1 bg-gray-100" id="date" />
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1" id="mode">Payment mode(e.g. UPI)</label>
+                    <select class="p-1" id="mode">
+                        <option>UPI</option>
+                        <option>Debit card</option>
+                        <option>Credit card</option>
+                        <option>Cash</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-2 justify-end">
+                <button class="p-1 px-3 border hover:bg-slate-300 rounded-md">Clear</button>
+                <button class="p-1 px-3 border bg-slate-300 hover:bg-slate-400 rounded-md " type="submit">Save</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <table class="border w-[50%] m-auto p-2 mt-10">
+            <thead>
+                <tr>
+                    <th class="border">Expense Name</th>
+                    <th class="border">Amount</th>
+                    <th class="border">Tag</th>
+                    <th class="border">Date</th>
+                    <th class="border">Payment Mode</th>
+                </tr>
+            </thead>
+            <tbody id="expenseList">
+            </tbody>
+    </section>
+    <script src="dist/bundle.js"></script>
+    <script type="module" src="./index.js" />
+</body>
+
+</html>
