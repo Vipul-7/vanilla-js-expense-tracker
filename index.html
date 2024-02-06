@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
+    <title>Expense Tracker - Add Expense</title>
     <link href="./output.css" rel="stylesheet">
 </head>
 
 <body>
+    <header>
+        <nav class="bg-slate-300 p-2 flex justify-center gap-4">
+            <a id="add-expense-link" href="/" class="text-blue-400">Add expense</a>
+            <a id="reports-link" href="./reports.html" class="text-blue-400">Reports</a>
+        </nav>
+    </header>
     <div id="error" class="error-message m-2 pl-8 hidden">
     </div>
     <div id="success" class="success-message m-2 pl-8 hidden"></div>
@@ -64,7 +70,8 @@
         </form>
     </section>
     <section>
-        <table class="border w-[50%] m-auto p-2 mt-10">
+        <h1 class="text-2xl underline my-5 w-[50%] m-auto font-bold">Recent Expenses:</h1>
+        <table class="border w-[50%] m-auto p-2">
             <thead class="border-4">
                 <tr>
                     <th class="border-4">Expense Name</th>

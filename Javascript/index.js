@@ -1,4 +1,4 @@
-import { printError, printSuccess } from './utils.js';
+import { removeAllInputErrors, showErrorMessage, showInputError, showSuccessMessage } from './utils.js';
 import { supabase } from './supabase.js';
 import { hideExpensesDataLoader, hideSendingExpenseDataLoader, showExpensesDataLoader, showSendingExpenseDataLoader } from './loader.js';
 
@@ -9,9 +9,52 @@ const formElement = document.forms["expense"];
 // on form submit
 formElement.addEventListener("submit", formSubmitHandler);
 
+// Function to set active link based on current route
+function setActiveLink() {
+    const currentPath = window.location.pathname;
+
+    // Remove "active" class from all links
+    const links = document.querySelectorAll('nav a');
+    links.forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Add "active" class to the link corresponding to the current route
+    if (currentPath === '/' || currentPath === '/add-expense' || currentPath === '/index.html') {
+        document.getElementById('add-expense-link').classList.add('active');
+    } else if (currentPath === '/reports.html') {
+        document.getElementById('reports-link').classList.add('active');
+    }
+}
+
+// Call setActiveLink when DOM content is loaded
+document.addEventListener("DOMContentLoaded", setActiveLink);
+
 async function formSubmitHandler(event) {
     event.preventDefault();
     const { title, amount, date, tag, mode } = event.target.elements;
+
+    // remove the input errors if any
+    removeAllInputErrors();
+
+    if (title.value === '' || amount.value === '' || date.value === '' || tag.value === '' || mode.value === '') {
+        if (title.value === '') {
+            showInputError('title');
+        }
+        if (amount.value === '') {
+            showInputError('amount');
+        }
+        if (date.value === '') {
+            showInputError('date');
+        }
+        if (tag.value === '') {
+            showInputError('tag');
+        }
+        if (mode.value === '') {
+            showInputError('mode');
+        }
+        return;
+    }
 
     const newExpense = {
         title: title.value,
@@ -38,12 +81,12 @@ async function addExpense(newExpense) {
 
     if (addExpense.error) {
         console.error(addExpense.error);
-        printError("Error while saving the expense :- " + addExpense.error.message);
+        showErrorMessage("Error while saving the expense :- " + addExpense.error.message);
         hideSendingExpenseDataLoader();
         return;
     }
     else {
-        printSuccess('Expense added successfully');
+        showSuccessMessage('Expense added successfully');
     }
     hideSendingExpenseDataLoader();
 }
@@ -74,7 +117,7 @@ async function renderExpenses() {
     await supabase.from('expenses').select('*').then(({ data, error }) => {
         if (error) {
             console.error(error);
-            printError("Error while fetching expenses :- " + error.message);
+            showErrorMessage("Error while fetching expenses :- " + error.message);
             hideExpensesDataLoader();
             return;
         }

@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+    .active {
+        text-decoration: underline;
+        color: #052b44;
+    }
+
     .error-message {
         background-color: #FECACA;
         border: 1px solid #EF4444;
@@ -41,6 +46,13 @@
         left: 4px;
         top: 50%;
         transform: translateY(-50%);
+    }
+
+    .input-error {
+        /* text-red-500 text-xs italic */
+        color: #EF4444;
+        font-size: 0.75rem;
+        font-style: italic;
     }
 
     .loader {
