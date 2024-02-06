@@ -1,12 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+import { printError, printSuccess } from './utils.js';
+import { supabase } from './supabase.js';
+import { hideExpensesDataLoader, hideSendingExpenseDataLoader, showExpensesDataLoader, showSendingExpenseDataLoader } from './loader.js';
 
-// Create a single supabase client for interacting with your database
-const supabase = createClient('https://yhhwaulcxdikovqbvkdq.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloaHdhdWxjeGRpa292cWJ2a2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxOTU5MTYsImV4cCI6MjAyMjc3MTkxNn0.rnDmpDN7vqVHVYD0Bi9Q5ibkkq7aWkhPw26dwXaXENo');
+// during intial load
+document.addEventListener("DOMContentLoaded", renderExpenses);
 
-// const currentExpenses = [];
 const formElement = document.forms["expense"];
-const expenseList = document.getElementById("expenseList");
-
+// on form submit
 formElement.addEventListener("submit", formSubmitHandler);
 
 async function formSubmitHandler(event) {
@@ -21,7 +21,15 @@ async function formSubmitHandler(event) {
         mode: mode.value
     };
 
-    // currentExpenses.push(newExpense);
+    await addExpense(newExpense);
+    await renderExpenses();
+
+    formElement.reset();
+}
+
+// responsible for adding the expense
+async function addExpense(newExpense) {
+    showSendingExpenseDataLoader();
     const addExpense = await supabase
         .from('expenses')
         .insert([
@@ -30,20 +38,20 @@ async function formSubmitHandler(event) {
 
     if (addExpense.error) {
         console.error(addExpense.error);
-        printError(addExpense.error.message);
+        printError("Error while saving the expense :- " + addExpense.error.message);
+        hideSendingExpenseDataLoader();
         return;
     }
     else {
-        // console.log('Expense added successfully');
         printSuccess('Expense added successfully');
     }
-
-    renderExpense();
-
-    formElement.reset();
+    hideSendingExpenseDataLoader();
 }
 
-async function renderExpense() {
+// responsible for rendering the expenses
+async function renderExpenses() {
+    const expenseList = document.getElementById("expenseList");
+
     function createTableCell(text) {
         const td = document.createElement("td");
         td.textContent = text;
@@ -62,9 +70,12 @@ async function renderExpense() {
         expenseList.appendChild(tr);
     }
 
+    showExpensesDataLoader();
     await supabase.from('expenses').select('*').then(({ data, error }) => {
         if (error) {
             console.error(error);
+            printError("Error while fetching expenses :- " + error.message);
+            hideExpensesDataLoader();
             return;
         }
 
@@ -73,29 +84,5 @@ async function renderExpense() {
             renderExpenseRow(expense);
         });
     });
-}
-
-
-// to print the at the above
-const printError = (error) => {
-    const errorElement = document.getElementById('error');
-    errorElement.textContent = error;
-    errorElement.classList.remove('hidden');
-
-    setTimeout(() => {
-        errorElement.textContent = '';
-        errorElement.classList.add('hidden');
-    }, 10000);
-}
-
-// print the success message above
-const printSuccess = (message) => {
-    const successElement = document.getElementById('success');
-    successElement.textContent = message;
-    successElement.classList.remove('hidden');
-
-    setTimeout(() => {
-        successElement.textContent = '';
-        successElement.classList.add('hidden');
-    }, 10000);
+    hideExpensesDataLoader();
 }
