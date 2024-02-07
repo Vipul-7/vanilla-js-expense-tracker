@@ -1,9 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  entry: './Javascript/index.js',
+  entry: {
+    index: './Javascript/index.js',        // Entry point for index.js
+    reports: './Javascript/reports.js',    // Entry point for reports.js
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',          // Dynamically generate bundle names
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {

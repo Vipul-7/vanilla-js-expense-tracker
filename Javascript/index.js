@@ -1,34 +1,21 @@
 import { removeAllInputErrors, showErrorMessage, showInputError, showSuccessMessage } from './utils.js';
 import { supabase } from './supabase.js';
 import { hideExpensesDataLoader, hideSendingExpenseDataLoader, showExpensesDataLoader, showSendingExpenseDataLoader } from './loader.js';
+import "./active-link.js" // set active links to current route
 
 // during intial load
 document.addEventListener("DOMContentLoaded", renderExpenses);
 
 const formElement = document.forms["expense"];
+
 // on form submit
 formElement.addEventListener("submit", formSubmitHandler);
 
-// Function to set active link based on current route
-function setActiveLink() {
-    const currentPath = window.location.pathname;
-
-    // Remove "active" class from all links
-    const links = document.querySelectorAll('nav a');
-    links.forEach(link => {
-        link.classList.remove('active');
-    });
-
-    // Add "active" class to the link corresponding to the current route
-    if (currentPath === '/' || currentPath === '/add-expense' || currentPath === '/index.html') {
-        document.getElementById('add-expense-link').classList.add('active');
-    } else if (currentPath === '/reports.html') {
-        document.getElementById('reports-link').classList.add('active');
-    }
-}
-
-// Call setActiveLink when DOM content is loaded
-document.addEventListener("DOMContentLoaded", setActiveLink);
+// clear the form field when button clicked
+const clearButtonElement = document.getElementById("clear-button");
+clearButtonElement.addEventListener("click", () => {
+    formElement.reset();
+})
 
 async function formSubmitHandler(event) {
     event.preventDefault();
