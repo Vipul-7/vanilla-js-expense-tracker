@@ -101,7 +101,7 @@ async function renderExpenses() {
     }
 
     showLargeLoader();
-    await supabase.from('expenses').select('*').then(({ data, error }) => {
+    await supabase.from('expenses').select('*').order("date", { ascending: false }).limit(16).then(({ data, error }) => {
         if (error) {
             console.error(error);
             showErrorMessage("Error while fetching expenses :- " + error.message);
