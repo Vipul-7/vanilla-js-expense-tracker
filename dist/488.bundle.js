@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkexpense_tracker=self.webpackChunkexpense_tracker||[]).push([[488],{488:e=>{e.exports=function(){throw new Error("ws does not work in the browser. Browser clients must use the native WebSocket object")}}}]);

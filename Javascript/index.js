@@ -1,6 +1,6 @@
 import { removeAllInputErrors, showErrorMessage, showInputError, showSuccessMessage } from './utils.js';
 import { supabase } from './supabase.js';
-import { hideExpensesDataLoader, hideSendingExpenseDataLoader, showExpensesDataLoader, showSendingExpenseDataLoader } from './loader.js';
+import { hideLargeLoader, hideSendingExpenseDataLoader, showLargeLoader, showSendingExpenseDataLoader } from './loader.js';
 import "./active-link.js" // set active links to current route
 
 // during intial load
@@ -100,12 +100,12 @@ async function renderExpenses() {
         expenseList.appendChild(tr);
     }
 
-    showExpensesDataLoader();
-    await supabase.from('expenses').select('*').then(({ data, error }) => {
+    showLargeLoader();
+    await supabase.from('expenses').select('*').order("date", { ascending: false }).limit(16).then(({ data, error }) => {
         if (error) {
             console.error(error);
             showErrorMessage("Error while fetching expenses :- " + error.message);
-            hideExpensesDataLoader();
+            hideLargeLoader();
             return;
         }
 
@@ -114,5 +114,5 @@ async function renderExpenses() {
             renderExpenseRow(expense);
         });
     });
-    hideExpensesDataLoader();
+    hideLargeLoader();
 }
