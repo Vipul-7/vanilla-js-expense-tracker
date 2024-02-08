@@ -1,10 +1,10 @@
 // Function to show loader
-export function showExpensesDataLoader() {
+export function showLargeLoader() {
     document.getElementById('expense-list-loader').style.display = 'block';
 }
 
 // Function to hide loader
-export function hideExpensesDataLoader() {
+export function hideLargeLoader() {
     document.getElementById('expense-list-loader').style.display = 'none';
 }
 
