@@ -9,10 +9,6 @@ const formElement = document.forms["report-filter"];
 
 formElement.addEventListener("submit", filterFormSubmitHandler);
 
-const daysInMonths = {
-
-}
-
 async function filterFormSubmitHandler(event) {
     event.preventDefault();
     showLargeLoader();
@@ -51,6 +47,10 @@ const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
 ];
+function daysInMonthArray(year, month) {
+    const days = new Date(year, month, 0).getDate();
+    return Array.from({ length: days }, (_, i) => i + 1);
+}
 
 function prepareDataForYear(filteredData, dataMode) {
     const dataByMode = {};
@@ -101,22 +101,53 @@ function prepareDataForQuarter() {
 
 }
 
-function prepareDataForMonth(filteredData) {
-    const dataOneDay = {};
+function prepareDataForMonth(filteredData, dataMode, currentMonth) {
+    const dataByMode = {};
+
 
     filteredData.forEach(expense => {
-        const date = new Date(expense.date);
-        const day = date.toLocaleString('default', { day: "numeric" });
+        let xAxis;
 
-        if (dataOneDay[day]) {
-            dataOneDay[day] += expense.amount;
+        if (dataMode === "amount") {
+            const date = new Date(expense.date);
+            xAxis = date.toLocaleString('default', { day: "numeric" })
+        }
+        else if (dataMode === "tag") {
+            xAxis = expense.tag;
+        }
+        else {
+            xAxis = expense.mode;
+        }
+
+        if (dataByMode[xAxis]) {
+            dataByMode[xAxis] += expense.amount;
         } else {
-            dataOneDay[day] = expense.amount;
+            dataByMode[xAxis] = expense.amount;
         }
     });
+
+    // add remaining months with 0 amount
+    let xAxisArray;
+    if (dataMode === "amount") {
+        xAxisArray = daysInMonthArray(selectYear.value, currentMonth);
+    }
+    else if (dataMode === "tag") {
+        xAxisArray = expenseTags;
+    }
+    else {
+        xAxisArray = paymentModes;
+    }
+
+    xAxisArray.forEach(xAxis => {
+        if (!dataByMode[xAxis]) {
+            dataByMode[xAxis] = 0;
+        }
+    });
+
+    return dataByMode;
 }
 
-function addChartElement() {
+function addChartElement(timeRange, month) {
     const reportContainerElement = document.createElement("div");
     reportContainerElement.classList.add("report-container");
 
@@ -125,7 +156,12 @@ function addChartElement() {
     const ctx = canvasElement.getContext('2d');
 
     const titleElement = document.createElement("h2")
-    titleElement.textContent = selectYear.value;
+    if (!timeRange) {
+        titleElement.textContent = selectYear.value
+    }
+    else if (timeRange === "month" && month) {
+        titleElement.textContent = months[month - 1] + " " + selectYear.value;
+    }
     titleElement.classList.add("report-container-h2");
 
     reportContainerElement.appendChild(titleElement);
@@ -138,15 +174,14 @@ function addChartElement() {
 
 async function reportGeneration(timeRange, selectYear, dataMode) {
     const filteredData = await fetchReportData(selectYear, dataMode);
-    console.log(filteredData);
 
-    if (!timeRange) {
-        showErrorMessage("Time range is null or undefined")
+    if (!timeRange || !selectYear || !dataMode) {
+        showErrorMessage("Filter input is null or undefined. Please try again.")
         return;
     }
 
-    const chartData = [];
     if (timeRange === "year") {
+        const chartData = [];
         const dataByMode = prepareDataForYear(filteredData, dataMode);
 
         let xAxisArray;
@@ -165,30 +200,54 @@ async function reportGeneration(timeRange, selectYear, dataMode) {
                 x: xAxis, y: dataByMode[xAxis]
             })
         }
+
+        createChart(chartData, dataMode);
     }
     else if (timeRange === "quarter") {
-        const dataByFiveDays = prepareDataForQuarter(filteredData);
-
-        chartData = [
-        ]
+        const dataByFiveDays = prepareDataForQuarter(filteredData, dataMode);
     }
     else { // monthly
-        const dataOneDay = prepareDataForMonth(filteredData);
+        months.forEach((month, index) => {
+            const chartData = [];
+            const monthFilteredData = filteredData.filter(expense => {
+                const date = new Date(expense.date);
+                return date.getMonth() === index;  // getMonth() returns 0-11
+            })
+            const dataByMode = prepareDataForMonth(monthFilteredData, dataMode, index + 1);
 
-        chartData = [
+            let xAxisArray;
+            if (dataMode === "amount") {
+                xAxisArray = daysInMonthArray(selectYear, index + 1);
+            }
+            else if (dataMode === "tag") {
+                xAxisArray = expenseTags;
+            }
+            else {
+                xAxisArray = paymentModes;
+            }
 
-        ]
+            for (const xAxis of xAxisArray) {
+                chartData.push({
+                    x: xAxis, y: dataByMode[xAxis]
+                })
+            }
+
+            createChart(chartData, dataMode, timeRange, index + 1);
+        })
     }
-
-    createChart(chartData, dataMode);
 }
 
-function createChart(chartData,dataMode) {
-    const ctx = addChartElement();
+function createChart(chartData, dataMode, timeRange = null, month = null) {
+    const ctx = addChartElement(timeRange, month);
 
     let label = "Expenses by ";
     if (dataMode === "amount") {
-        label += "month"
+        if (timeRange === "month") {
+            label += "day"
+        }
+        else {
+            label += "month"
+        }
     }
     else if (dataMode === "tag") {
         label += "Expense tag"
