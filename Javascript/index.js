@@ -97,6 +97,65 @@ async function renderExpenses() {
             tr.appendChild(td);
         });
 
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add('delete-button'); // opens a dialog for confirmation
+
+        // const dialog = document.querySelector("dialog");
+        deleteButton.addEventListener("click", async () => {
+            // dialog.showModal();
+            // dialog.add
+            showLargeLoader();
+            const { data, error } = await supabase
+                .from('expenses')
+                .delete()
+                .eq('id', expense.id);
+
+            console.log(expense)
+
+            if (error) {
+                console.error(error);
+                showErrorMessage("Error while deleting the expense :- " + error.message);
+                hideLargeLoader();
+                dialog.close();
+                return;
+            }
+            dialog.close();
+            showSuccessMessage("Expense deleted successfully")
+            await renderExpenses();
+            hideLargeLoader();
+        });
+
+        // const cancelDialogButton = document.getElementById("expense-delete-dialog-cancel");
+        // const deleteDialogButton = document.getElementById("expense-delete-dialog-delete");
+
+        // cancelDialogButton.addEventListener("click", () => {
+        //     dialog.close();
+        // })
+
+        // deleteDialogButton.addEventListener("click", async () => {  
+        //     // showLargeLoader();
+        //     // const { data, error } = await supabase
+        //     //     .from('expenses')
+        //     //     .delete()
+        //     //     .eq('id', expense.id);
+
+        //     // console.log(expense)
+
+        //     // if (error) {
+        //     //     console.error(error);
+        //     //     showErrorMessage("Error while deleting the expense :- " + error.message);
+        //     //     hideLargeLoader();
+        //     //     dialog.close();
+        //     //     return;
+        //     // }
+        //     // dialog.close();
+        //     // showSuccessMessage("Expense deleted successfully")
+        //     // await renderExpenses();
+        //     // hideLargeLoader();
+        // })
+
+        tr.appendChild(deleteButton);
         expenseList.appendChild(tr);
     }
 
