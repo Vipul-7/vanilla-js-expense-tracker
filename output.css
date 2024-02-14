@@ -1022,6 +1022,10 @@ video {
   width: 1.75rem;
 }
 
+.w-\[18\%\] {
+  width: 18%;
+}
+
 .w-\[25vw\] {
   width: 25vw;
 }
@@ -1040,6 +1044,10 @@ video {
 
 .w-\[weird-and-invalid\] {
   width: weird-and-invalid;
+}
+
+.w-auto {
+  width: auto;
 }
 
 .flex-shrink {

@@ -13,6 +13,8 @@
         <nav class="bg-slate-300 p-2 flex justify-center gap-4">
             <a id="add-expense-link" href="/" class="text-blue-400">Add expense</a>
             <a id="reports-link" href="./reports.html" class="text-blue-400">Reports</a>
+            <a id="login-link" href="/login.html" class="text-blue-400">Login</a>
+            <a id="signup-link" href="/signup.html" class="text-blue-400">Signup</a>
         </nav>
     </header>
     <dialog class="absolute shadow p-3 top-1/2 w-[25vw] bg-slate-300 rounded-md" id="dialog">
@@ -21,8 +23,10 @@
             <p class="text-gray-600 text-center">This action will delete the expense from the database.</p>
         </div>
         <div class="flex justify-end gap-2">
-            <button class="bg-slate-200 rounded-md py-1 px-2 hover:bg-slate-100" id="expense-delete-dialog-cancel">Cancel</button>
-            <button class="bg-slate-200 rounded-md py-1 px-2 hover:bg-slate-100" id="expense-delete-dialog-delete">Delete</button>
+            <button class="bg-slate-200 rounded-md py-1 px-2 hover:bg-slate-100"
+                id="expense-delete-dialog-cancel">Cancel</button>
+            <button class="bg-slate-200 rounded-md py-1 px-2 hover:bg-slate-100"
+                id="expense-delete-dialog-delete">Delete</button>
         </div>
     </dialog>
     <div id="error" class="error-message m-2 pl-8 hidden">

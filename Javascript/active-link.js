@@ -13,7 +13,12 @@ function setActiveLink() {
         document.getElementById('add-expense-link').classList.add('active');
     } else if (currentPath === '/reports' || currentPath === '/reports.html') {
         document.getElementById('reports-link').classList.add('active');
-    } else {
+    } else if (currentPath === '/login' || currentPath === '/login.html') {
+        document.getElementById('login-link').classList.add('active');
+    } else if (currentPath === '/signup' || currentPath === '/signup.html') {
+        document.getElementById('signup-link').classList.add('active');
+    }
+    else {
         console.log('No matching route found:', currentPath);
     }
 }
