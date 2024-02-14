@@ -1,10 +1,12 @@
 import { removeAllInputErrors, showErrorMessage, showInputError, showSuccessMessage } from './utils.js';
 import { supabase } from './supabase.js';
-import { hideLargeLoader, hideSendingExpenseDataLoader, showLargeLoader, showSendingExpenseDataLoader } from './loader.js';
+import { hideLargeLoader, hideSmallLoader, showLargeLoader, showSmallLoader } from './loader.js';
+import { logoutHandler } from './logout.js';
 import "./active-link.js" // set active links to current route
 
 // during intial load
 document.addEventListener("DOMContentLoaded", renderExpenses);
+import "./getUser.js"
 
 const formElement = document.forms["expense"];
 
@@ -59,7 +61,7 @@ async function formSubmitHandler(event) {
 
 // responsible for adding the expense
 async function addExpense(newExpense) {
-    showSendingExpenseDataLoader();
+    showSmallLoader();
     const addExpense = await supabase
         .from('expenses')
         .insert([
@@ -69,13 +71,13 @@ async function addExpense(newExpense) {
     if (addExpense.error) {
         console.error(addExpense.error);
         showErrorMessage("Error while saving the expense :- " + addExpense.error.message);
-        hideSendingExpenseDataLoader();
+        hideSmallLoader();
         return;
     }
     else {
         showSuccessMessage('Expense added successfully');
     }
-    hideSendingExpenseDataLoader();
+    hideSmallLoader();
 }
 
 // responsible for rendering the expenses
@@ -143,3 +145,7 @@ async function renderExpenses() {
     });
     hideLargeLoader();
 }
+
+// logout handler
+const logoutButton = document.getElementById("logout-button");
+logoutButton.addEventListener("click" , logoutHandler);

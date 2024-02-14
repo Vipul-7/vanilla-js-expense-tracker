@@ -1,6 +1,7 @@
 import "./active-link.js" // set active links to current route
 import { supabase } from "./supabase.js";
 import { removeAllInputErrors, showInputError, showSuccessMessage } from "./utils.js";
+import "./getUser.js"
 
 const formElement = document.forms["signup"];
 

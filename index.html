@@ -13,8 +13,10 @@
         <nav class="bg-slate-300 p-2 flex justify-center gap-4">
             <a id="add-expense-link" href="/" class="text-blue-400">Add expense</a>
             <a id="reports-link" href="./reports.html" class="text-blue-400">Reports</a>
-            <a id="login-link" href="/login.html" class="text-blue-400">Login</a>
-            <a id="signup-link" href="/signup.html" class="text-blue-400">Signup</a>
+            <button id="logout-button" class="text-red-400 hidden">Logout</button>
+            <a id="login-link" href="/login.html" class="text-blue-400 block">Login</a>
+            <a id="signup-link" href="/signup.html" class="text-blue-400 block">Signup</a>
+            <p id="user-email" class="hidden"></p>
         </nav>
     </header>
     <dialog class="absolute shadow p-3 top-1/2 w-[25vw] bg-slate-300 rounded-md" id="dialog">

@@ -1,5 +1,6 @@
 import "./active-link.js" // set active links to current route
 import { supabase } from './supabase.js';
+import "./getUser.js"
 
 import Chart from 'chart.js/auto'
 import { showErrorMessage, showSuccessMessage } from "./utils.js";
