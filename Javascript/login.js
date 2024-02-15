@@ -33,4 +33,6 @@ async function formSubmitHandler(event) {
     if (!error) {
         showSuccessMessage("Link sent to your email")
     }
+
+    formElement.reset();
 }

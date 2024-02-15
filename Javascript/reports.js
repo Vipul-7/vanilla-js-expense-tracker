@@ -5,6 +5,7 @@ import "./getUser.js"
 import Chart from 'chart.js/auto'
 import { showErrorMessage, showSuccessMessage } from "./utils.js";
 import { hideLargeLoader, showLargeLoader } from './loader.js';
+import { logoutHandler } from "./logout.js";
 
 const formElement = document.forms["report-filter"];
 
@@ -372,3 +373,7 @@ function createChart(chartData, dataMode, timeRange = null, sequenceNumber = nul
         },
     });
 }
+
+// logout handler
+const logoutButton = document.getElementById("logout-button");
+logoutButton.addEventListener("click", logoutHandler);

@@ -105,24 +105,19 @@ async function renderExpenses() {
 
         deleteButton.addEventListener("click", async () => {
             showLargeLoader();
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('expenses')
                 .delete()
                 .eq('id', expense.id);
 
-            console.log(expense)
-
             if (error) {
                 console.error(error);
-                showErrorMessage("Error while deleting the expense :- " + error.message);
                 hideLargeLoader();
-                dialog.close();
+                showErrorMessage("Error while deleting the expense :- " + error.message);
                 return;
             }
-            dialog.close();
             showSuccessMessage("Expense deleted successfully")
             await renderExpenses();
-            hideLargeLoader();
         });
 
         tr.appendChild(deleteButton);
@@ -148,4 +143,4 @@ async function renderExpenses() {
 
 // logout handler
 const logoutButton = document.getElementById("logout-button");
-logoutButton.addEventListener("click" , logoutHandler);
+logoutButton.addEventListener("click", logoutHandler);

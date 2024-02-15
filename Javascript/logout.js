@@ -19,5 +19,6 @@ export const logoutHandler = async () => {
         logoutButton.style.display = "none";
         loginLink.style.display = "block";
         signupLink.style.display = "block";
+        location.reload();
     }
 }
