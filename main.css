@@ -94,8 +94,13 @@
         text-decoration: underline;
     }
 
-    /* .report-container-canvas {
-        width: 100px;
-        height: 100px;
-    } */
+    .delete-button {
+        background-color: rgb(218, 219, 220);
+        border-radius: 2px;
+        padding: 1px 3px;
+        margin: 1px;
+        display: flex;
+        /* width: 100%; */
+        justify-content: center;
+    }
 }

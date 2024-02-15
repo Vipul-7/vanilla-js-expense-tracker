@@ -8,10 +8,10 @@ export function hideLargeLoader() {
     document.getElementById('expense-list-loader').style.display = 'none';
 }
 
-export function showSendingExpenseDataLoader() {
+export function showSmallLoader() {
     document.getElementById('save-button-loader').style.display = 'block';
 }
 
-export function hideSendingExpenseDataLoader() {
+export function hideSmallLoader() {
     document.getElementById('save-button-loader').style.display = 'none';
 }
